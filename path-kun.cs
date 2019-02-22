@@ -122,14 +122,29 @@ class DriveMap
                 {
                     using (mo)
                     {
-                        if (mo["DriveType"].ToString() != "4")
-                            continue;
-
                         string driveName = (mo["Name"] ?? string.Empty).ToString();
-                        string path = (mo["ProviderName"] ?? string.Empty).ToString();
-                        if (path.Length == 0)
-                            path = loadDosDrivePath(driveName);
-                        this.deviceMap.Add(driveName.ToUpper(), new MountedPath(driveName, path));
+                        string path;
+
+                        switch (mo["DriveType"].ToString()) {
+                            case "3":
+                                // Windows 10 subst command
+
+                                if (driveName.Length == 2 && driveName[1] == ':') {
+                                    path = loadDosDrivePath(driveName);
+                                    if (path.Length > 1 && path[1] == ':')
+                                        this.deviceMap.Add(driveName.ToUpper(), new MountedPath(driveName, path));
+                                }
+
+                                break;
+
+                            case "4":
+                                path = (mo["ProviderName"] ?? string.Empty).ToString();
+                                if (path.Length == 0)
+                                    path = loadDosDrivePath(driveName);
+
+                                this.deviceMap.Add(driveName.ToUpper(), new MountedPath(driveName, path));
+                                break;
+                        }
                     }
                 }
             }
