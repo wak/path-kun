@@ -8,7 +8,7 @@ class Program
     static void Main(string[] args)
     {
         if (args.Length != 1) {
-            Console.WriteLine("usage: path-kun.exe filepath");
+            Console.WriteLine("usage: path-kun-explorer.exe filepath");
             return;
         }
         
@@ -16,9 +16,9 @@ class Program
             DriveMap map = new DriveMap();
             SharablePath sharablePath = new SharablePath(map, args[0]);
 
-            string result = "<" + sharablePath.ToString() + ">";
-            Console.WriteLine(result);
-            Clipboard.SetText(result);
+            System.Diagnostics.Process.Start(
+                "EXPLORER.EXE", String.Format(@"/select,""{0}""", sharablePath.ToString())
+            );
         } catch (Exception e) {
             Console.WriteLine(e.ToString());
         }
