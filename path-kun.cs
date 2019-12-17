@@ -16,7 +16,7 @@ class Program
             DriveMap map = new DriveMap();
             SharablePath sharablePath = new SharablePath(map, args[0]);
 
-            string result = "<" + sharablePath.ToString() + ">";
+            string result = string.Format("<{0}>", sharablePath.ToString());
             Console.WriteLine(result);
             Clipboard.SetText(result);
         } catch (Exception e) {
